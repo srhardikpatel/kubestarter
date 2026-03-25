@@ -17,7 +17,6 @@ Run the following commands on both the master and worker nodes to prepare them f
 
 ```bash
 # using 'sudo su' is not a good practice.
-
 sudo apt update
 sudo apt-get install -y apt-transport-https ca-certificates curl gpg
 sudo apt install docker.io -y
