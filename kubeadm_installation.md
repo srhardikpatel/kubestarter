@@ -18,39 +18,27 @@ Run the following commands on both the master and worker nodes to prepare them f
 ```bash
 # using 'sudo su' is not a good practice.
 
-sudo apt-get update
-sudo apt-get install -y apt-transport-https ca-certificates curl gpg
-
-# Create the directory for keyrings if it doesn't exist
-sudo mkdir -p -m 755 /etc/apt/keyrings
-# Download the signing key
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-
-echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-sudo apt-get update
-sudo apt-get install -y kubelet kubeadm kubectl
-
-
-(Optional but recommended) Mark the packages to hold their current version to prevent unintended upgrades:
-
-sudo apt-mark hold kubelet kubeadm kubectl
-
-
-
 sudo apt update
-sudo apt-get install -y apt-transport-https ca-certificates curl
+sudo apt-get install -y apt-transport-https ca-certificates curl gpg
 sudo apt install docker.io -y
 
 sudo systemctl enable --now docker # enable and start in single command.
 
-# Adding GPG keys.
-curl -fsSL "https://packages.cloud.google.com/apt/doc/apt-key.gpg" | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
+# Create the directory for keyrings if it doesn't exist
+sudo mkdir -p -m 755 /etc/apt/keyrings
+
+# Download the signing key
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 # Add the repository to the sourcelist.
-echo 'deb https://packages.cloud.google.com/apt kubernetes-xenial main' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.35/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-sudo apt update 
-sudo apt install kubeadm=1.20.0-00 kubectl=1.20.0-00 kubelet=1.20.0-00 -y
+sudo apt update
+sudo apt install -y kubelet kubeadm kubectl
+
+#(Optional but recommended) Mark the packages to hold their current version to prevent unintended upgrades:
+
+sudo apt-mark hold kubelet kubeadm kubectl
 ```
 
 **Sample Command run on master node**
